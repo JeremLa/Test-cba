@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>Réservation</h1>
+
+    <a href="{{ path('user_new') }}" class="btn btn-primary">Nouvel utilisateur</a>
+    <a href="{{ path('ressource_new') }}" class="btn btn-primary">Nouvelle ressource</a>
+
+
+    <div id="info">
+        <p class="bg-success hidden">L'utilisateur à bien réservé la ressource.</p>
+        <p class="bg-warning hidden">Une erreur est survenu lors de la réservation de la ressource.</p>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Réservé par</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ressource in ressources %}
+            <tr>
+                <td><a href="{{ path('ressource_show', { 'id': ressource.id }) }}">{{ ressource.title }}</a></td>
+                <td>
+                    <select name="reservedBy" class="reservedBy" data-ressource-id="{{ ressource.id }}">
+                        {% set selected = "" %}
+                        {% set selectedBool = false %}
+                        {% for user in users %}
+                            {% if ressource.user is not null and ressource.user.id == user.id %}
+                                {% set selected = 'selected="selected"' %}
+                                {% set selectedBool = true %}
+                            {% endif %}
+                            <option value="{{ user.id }}" {{ selected }}>{{ user.firstName|capitalize ~' '~ user.lastName|capitalize }}</option>
+                            {% set selected = "" %}
+                        {% endfor %}
+                        {% if selectedBool == false%}
+                            <option value="null" selected="selected"></option>
+                        {% else %}
+                            <option value="null" ></option>
+                        {% endif %}
+                    </select>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('resources/reservation.js') }}"></script>
+{% endblock %}

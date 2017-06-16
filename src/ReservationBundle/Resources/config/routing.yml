@@ -1,0 +1,7 @@
+reservation_homepage:
+    path:     /
+    defaults: { _controller: ReservationBundle:Reservation:index }
+
+reservation_update:
+    path:     /reservation/update
+    defaults: { _controller: ReservationBundle:Reservation:reservationUpdate }
